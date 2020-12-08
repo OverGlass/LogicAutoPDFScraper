@@ -1,11 +1,13 @@
 import { _ } from "./deps.ts";
 
-export const pickedTexts = (t: string) => ({
-  reference: pickReferenceFromText(t),
-  model: pickModelFromText(t),
-  emission: pickEmissionFromText(t),
-  allOptions: pickAllOptionsFromText(t),
-});
+export const pickedTexts = (t: string) => {
+  return {
+    reference: pickReferenceFromText(t),
+    model: pickModelFromText(t),
+    emission: pickEmissionFromText(t),
+    allOptions: pickAllOptionsFromText(t),
+  };
+};
 
 export const pickReferenceFromText = (text: string) =>
   getRegexMatch(/(?<=Référence )(.*)(?=\n)/g, text);
@@ -18,7 +20,7 @@ export const pickEmissionFromText = (text: string) =>
 
 export function pickAllOptionsFromText(text: string) {
   const noiseTextsRegex = /(Référence|Référence)([\S\s]*?)(S[.]L[.]U[.]\n)/g;
-  const textPrepation = text.replace(noiseTextsRegex, "");
+  const textPrepation = text.replace(noiseTextsRegex, "").replace(/’/g, "'");
   return getRegexMatch(/OPTIONS([\S\s]*?)(?=Powered)/g, textPrepation);
 }
 
